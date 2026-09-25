@@ -1,7 +1,17 @@
-using Microsoft.EntityFrameworkCore;
 using API.Data;
+using Microsoft.EntityFrameworkCore;
+using API.Vault;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 2. Load secrets from Vault into Configuration
+builder.Configuration.AddVaultAppConfiguration();
+// 3. Test printing secrets fetched from Vault:
+Console.WriteLine("========================================");
+Console.WriteLine("[Vault] Loaded JWT Secret: " + builder.Configuration["JwtConfig:secret"]);
+Console.WriteLine("[Vault] Loaded Client ID:  " + builder.Configuration["JwtConfig:client_id"]);
+Console.WriteLine("[Vault] Loaded DB Conn:    " + builder.Configuration.GetConnectionString("DefaultConnection"));
+Console.WriteLine("========================================");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
