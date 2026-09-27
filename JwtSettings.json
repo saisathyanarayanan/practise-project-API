@@ -3,6 +3,6 @@
     "Secret": "this-is-my-super-secret-key-minimum-32-chars!!",
     "Issuer": "MyAPI",
     "Audience": "MyUI",
-    "ExpiryInMinutes": 1
+    "ExpiryInMinutes": 5
   }
 }
