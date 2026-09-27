@@ -2,10 +2,12 @@ using API.Cors;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Vault;
+using API.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("CorsSettings.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("JwtSettings.json", optional: false, reloadOnChange: true);
 
 // 2. Load secrets from Vault into Configuration
 builder.Configuration.AddVaultAppConfiguration();
@@ -23,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddAppCors(builder.Configuration);
+builder.Services.AddAppJwt(builder.Configuration);
 
 // Swagger services
 builder.Services.AddEndpointsApiExplorer();
@@ -47,6 +50,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseAppCors(app.Configuration);
+app.UseAuthentication();
 
 app.UseAuthorization();
 
