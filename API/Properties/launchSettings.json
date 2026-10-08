@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "http": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "exec \"D:\\my project one\\Solutions\\API\\bin\\Debug\\net10.0\\API.dll\"",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5012",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5012",
+        "VAULT_ADDRESS": "http://127.0.0.1:8200",
+        "VAULT_MOUNT_PATH": "digitalfinance/api",
+        "VAULT_SECRET_TYPE": "secrets",
+        "VAULT_VERSION": "1",
+        "VAULT_ROLE_ID": "196c1e90-b0c6-ec81-18b8-0baef8aec8c9",
+        "VAULT_SECRET_ID": "ad6a21fd-8b33-e7e1-6856-4101bac42020",
+        "VAULT_TIMEOUT": "1"
+      }
+    },
+    "https": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "exec \"D:\\my project one\\Solutions\\API\\bin\\Debug\\net10.0\\API.dll\"",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5012",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5012",
+        "VAULT_ADDRESS": "http://127.0.0.1:8200",
+        "VAULT_MOUNT_PATH": "digitalfinance/api",
+        "VAULT_SECRET_TYPE": "secrets",
+        "VAULT_VERSION": "1",
+        "VAULT_ROLE_ID": "196c1e90-b0c6-ec81-18b8-0baef8aec8c9",
+        "VAULT_SECRET_ID": "ad6a21fd-8b33-e7e1-6856-4101bac42020",
+        "VAULT_TIMEOUT": "1"
+      }
+    }
+  }
+}

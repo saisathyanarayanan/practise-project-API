@@ -1,0 +1,13 @@
+@API_HostAddress = http://localhost:5012
+
+### Get Method One
+GET {{API_HostAddress}}/api/test/method-one
+Accept: text/plain
+
+### Get Method Two
+GET {{API_HostAddress}}/api/test/method-two
+Accept: text/plain
+
+### Swagger UI
+GET {{API_HostAddress}}/swagger/index.html
+Accept: text/html

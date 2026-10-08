@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="../ApiGateway/ApiGateway.csproj" Id="22759ac9-2e07-48ed-ad4e-8f86e0124282" />
+  <Project Path="../TimeOffice.API/TimeOffice.API.csproj" Id="f926a8cd-826a-4a8c-8358-7053d3924193" />
+  <Project Path="API.csproj" />
+</Solution>
