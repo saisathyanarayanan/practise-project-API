@@ -27,12 +27,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IDatabaseHealthRepository, DatabaseHealthRepository>();
+builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
 
 // Application Layer Registrations - Services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDatabaseHealthService, DatabaseHealthService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IArgon2PasswordService, Argon2PasswordService>();
+builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 
 // Add services to the container.
 
