@@ -3,6 +3,8 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Vault;
 using API.Jwt;
+using API.Repositories;
+using API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +18,21 @@ Console.WriteLine("========================================");
 Console.WriteLine("[Vault] Loaded JWT Secret: " + builder.Configuration["JwtConfig:secret"]);
 Console.WriteLine("[Vault] Loaded Client ID:  " + builder.Configuration["JwtConfig:client_id"]);
 Console.WriteLine("[Vault] Loaded DB Conn:    " + builder.Configuration.GetConnectionString("DefaultConnection"));
-Console.WriteLine("========================================");
+Console.WriteLine("========================================");  
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Application Layer Registrations - Repositories
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IDatabaseHealthRepository, DatabaseHealthRepository>();
+
+// Application Layer Registrations - Services
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDatabaseHealthService, DatabaseHealthService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 // Add services to the container.
 

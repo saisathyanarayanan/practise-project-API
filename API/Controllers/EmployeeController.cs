@@ -1,8 +1,6 @@
-using API.Data;
-using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
@@ -10,12 +8,13 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class EmployeeController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    // 1. Controller only depends on the Service abstraction
+    private readonly IEmployeeService _employeeService;
 
-    // Constructor: ASP.NET Core automatically injects the AppDbContext instance here
-    public EmployeeController(AppDbContext context)
+    // 2. ASP.NET Core Dependency Injection provides the service instance
+    public EmployeeController(IEmployeeService employeeService)
     {
-        _context = context;
+        _employeeService = employeeService;
     }
 
     // GET /api/Employee?department=IT
@@ -23,87 +22,16 @@ public class EmployeeController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetEmployees([FromQuery] string? department = null)
     {
-        try
-        {
-            // LINQ QUERY APPROACH:
-            // 1. Start with IQueryable (does not execute SQL yet)
-            IQueryable<Employee> query = _context.Employees;
-
-            // 2. LINQ .Where() -> Translates to SQL "WHERE Department = @dept"
-            if (!string.IsNullOrWhiteSpace(department))
-            {
-                query = query.Where(e => e.Department.ToLower() == department.ToLower());
-            }
-
-            // 3. LINQ .OrderBy() -> Translates to SQL "ORDER BY Name ASC"
-            // 4. LINQ .ToListAsync() -> Executes the SQL query and returns results asynchronously
-            var list = await query
-                .OrderBy(e => e.Name)
-                .ToListAsync();
-
-            return Ok(new
-            {
-                source = "SQL Server Database (via EF Core & LINQ)",
-                count = list.Count,
-                data = list
-            });
-        }
-        catch (Exception ex)
-        {
-            // Fallback sample data if database table has not been created yet
-            var sampleEmployees = new List<Employee>
-            {
-                new() { Id = 1, Name = "Sathya N.", Department = "IT", Designation = "Full Stack Architect", Salary = 95000 },
-                new() { Id = 2, Name = "Alice Johnson", Department = "HR", Designation = "HR Manager", Salary = 70000 },
-                new() { Id = 3, Name = "Robert Vance", Department = "Finance", Designation = "Lead Accountant", Salary = 82000 },
-                new() { Id = 4, Name = "David Miller", Department = "IT", Designation = "Cloud Engineer", Salary = 91000 }
-            };
-
-            // In-Memory LINQ demonstration
-            var filtered = sampleEmployees
-                .Where(e => string.IsNullOrWhiteSpace(department) || e.Department.Equals(department, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(e => e.Name)
-                .ToList();
-
-            return Ok(new
-            {
-                source = "LINQ Demonstration (In-Memory Fallback)",
-                note = "To sync with real database, run 'dotnet ef database update'",
-                dbStatus = ex.Message,
-                count = filtered.Count,
-                data = filtered
-            });
-        }
+        var result = await _employeeService.GetEmployeesAsync(department);
+        return Ok(result);
     }
 
-    // GET /api/Employee/summary (LINQ GroupBy & Aggregations)
+    // GET /api/Employee/summary
     [HttpGet("summary")]
     [AllowAnonymous]
     public async Task<IActionResult> GetDepartmentSummary()
     {
-        try
-        {
-            // LINQ .GroupBy() + Aggregations -> Translates to SQL "GROUP BY Department, COUNT(*), AVG(Salary)"
-            var summary = await _context.Employees
-                .GroupBy(e => e.Department)
-                .Select(g => new
-                {
-                    Department = g.Key,
-                    TotalEmployees = g.Count(),
-                    AverageSalary = g.Average(e => e.Salary)
-                })
-                .ToListAsync();
-
-            return Ok(summary);
-        }
-        catch
-        {
-            return Ok(new[]
-            {
-                new { Department = "IT", TotalEmployees = 2, AverageSalary = 93000.00 },
-                new { Department = "HR", TotalEmployees = 1, AverageSalary = 70000.00 },
-                new { Department = "Finance", TotalEmployees = 1, AverageSalary = 82000.00 }
-            });
-        }
+        var summary = await _employeeService.GetDepartmentSummaryAsync();
+        return Ok(summary);
     }
 }

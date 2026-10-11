@@ -1,6 +1,7 @@
+using System.Security.Claims;
+using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -9,16 +10,19 @@ namespace API.Controllers;
 [Authorize] // Requires a valid JWT Bearer token for all actions
 public class DepartmentController : ControllerBase
 {
+    private readonly IDepartmentService _departmentService;
+
+    public DepartmentController(IDepartmentService departmentService)
+    {
+        _departmentService = departmentService;
+    }
 
     [HttpGet("test")]
     [AllowAnonymous]
     public IActionResult Test()
     {
-        return Ok(new
-        {
-            Service = "Primary API (Port 5012)",
-            Message = "Successfully reached through the YARP API Gateway!"
-        });
+        var result = _departmentService.GetGatewayStatus();
+        return Ok(result);
     }
 
     // ========================================================
@@ -29,13 +33,8 @@ public class DepartmentController : ControllerBase
     public IActionResult MethodA()
     {
         var callerId = User.Identity?.Name;
-        return Ok(new
-        {
-            status = "Success",
-            message = "Access granted to Method A (Confidential HR Data).",
-            caller = callerId,
-            department = "HR"
-        });
+        var result = _departmentService.GetHrAccessData(callerId);
+        return Ok(result);
     }
 
     // ========================================================
@@ -46,31 +45,20 @@ public class DepartmentController : ControllerBase
     public IActionResult MethodB()
     {
         var callerId = User.Identity?.Name;
-        return Ok(new
-        {
-            status = "Success",
-            message = "Access granted to Method B (Confidential Finance Data).",
-            caller = callerId,
-            department = "Finance"
-        });
+        var result = _departmentService.GetFinanceAccessData(callerId);
+        return Ok(result);
     }
 
     // ========================================================
     // METHOD C: Shared Method (Accessible by BOTH HR & Finance)
     // ========================================================
     [HttpGet("shared-method")]
-    [Authorize(Roles = "HR,Finance")] // Comma means OR (HR or Finance)
+    [Authorize(Roles = "HR,Finance")] // HR or Finance
     public IActionResult SharedMethod()
     {
         var callerId = User.Identity?.Name;
         var role = User.FindFirst(ClaimTypes.Role)?.Value;
-
-        return Ok(new
-        {
-            status = "Success",
-            message = "Access granted to Shared Common Method.",
-            caller = callerId,
-            callerDepartment = role
-        });
+        var result = _departmentService.GetSharedAccessData(callerId, role);
+        return Ok(result);
     }
 }

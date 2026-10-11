@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using API.Data;
+using API.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
@@ -10,14 +9,12 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class TestController : ControllerBase
 {
-    private readonly AppDbContext _context;
-    private readonly IConfiguration _configuration;
+    private readonly IDatabaseHealthService _healthService;
 
-    // Inject BOTH EF Core DbContext and IConfiguration (for ADO.NET)
-    public TestController(AppDbContext context, IConfiguration configuration)
+    // Inject only IDatabaseHealthService (Zero direct DbContext or SqlConnection!)
+    public TestController(IDatabaseHealthService healthService)
     {
-        _context = context;
-        _configuration = configuration;
+        _healthService = healthService;
     }
 
     // ==========================================
@@ -26,7 +23,7 @@ public class TestController : ControllerBase
     [HttpGet("check-efcore")]
     public IActionResult CheckEfCore()
     {
-        bool canConnect = _context.Database.CanConnect();
+        bool canConnect = _healthService.CheckEfCore();
 
         if (canConnect)
         {
@@ -40,49 +37,22 @@ public class TestController : ControllerBase
     // 2. ADO.NET APPROACH (Raw SQL)
     // ==========================================
     [HttpGet("check-adonet")]
-    public IActionResult CheckAdoNet()
+    public async Task<IActionResult> CheckAdoNet()
     {
-        // Step A: Read the connection string from appsettings.json
-        string connectionString = _configuration.GetConnectionString("DefaultConnection")!;
+        var result = await _healthService.CheckAdoNetAsync();
 
-        // Step B: Create the SqlConnection (using statement auto-closes the connection)
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        if (result.IsSuccess)
         {
-            try
+            return Ok(new
             {
-                // Step C: Open the physical connection to SQL Server
-                connection.Open();
-
-                // Step D: Write a raw SQL query asking SQL Server which database we are in
-                string query = "SELECT DB_NAME() AS CurrentDatabase";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    // Step E: Execute the command and read the result
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            string dbName = reader["CurrentDatabase"].ToString()!;
-
-                            return Ok(new
-                            {
-                                Approach = "ADO.NET",
-                                Status = "Connected Successfully!",
-                                DatabaseName = dbName,
-                                ConnectionState = connection.State.ToString()
-                            });
-                        }
-                    }
-                }
-
-                return Ok("ADO.NET: Connected successfully!");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"ADO.NET Connection Failed: {ex.Message}");
-            }
+                result.Approach,
+                result.Status,
+                result.DatabaseName,
+                result.ConnectionState
+            });
         }
+
+        return StatusCode(500, $"ADO.NET Connection Failed: {result.ErrorMessage}");
     }
 
     // ==========================================
