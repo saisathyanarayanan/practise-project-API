@@ -28,6 +28,7 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IDatabaseHealthRepository, DatabaseHealthRepository>();
 builder.Services.AddScoped<IUserManagementRepository, UserManagementRepository>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 
 // Application Layer Registrations - Services
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
@@ -36,6 +37,7 @@ builder.Services.AddScoped<IDatabaseHealthService, DatabaseHealthService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IArgon2PasswordService, Argon2PasswordService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 
 // Add services to the container.
 
@@ -51,6 +53,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+try
+{
+    using var scope = app.Services.CreateScope();
+    var personRepo = scope.ServiceProvider.GetRequiredService<IPersonRepository>();
+    await personRepo.EnsureTablesExistAsync();
+    Console.WriteLine("[DB] Verified Persons & IdempotencyRecords tables.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[DB Warning] Failed to ensure tables exist: {ex.Message}");
+}
+
 app.UseSwagger();
 app.UseSwaggerUI();
 

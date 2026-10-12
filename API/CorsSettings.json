@@ -6,7 +6,8 @@
       "https://localhost:4200"
     ],
     "AllowedMethods": [ "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS" ],
-    "AllowedHeaders": [ "Authorization", "Content-Type", "Accept" ],
+    "AllowedHeaders": [ "Authorization", "Content-Type", "Accept", "Idempotency-Key" ],
+    "ExposedHeaders": [ "Idempotent-Replay" ],
     "AllowCredentials": true
   }
 }

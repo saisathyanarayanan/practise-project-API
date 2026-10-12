@@ -20,6 +20,11 @@ public static class CorsExtensions
                     .WithMethods(settings.AllowedMethods)
                     .WithHeaders(settings.AllowedHeaders);
 
+                if (settings.ExposedHeaders.Length > 0)
+                {
+                    policy.WithExposedHeaders(settings.ExposedHeaders);
+                }
+
                 if (settings.AllowCredentials)
                 {
                     policy.AllowCredentials();
