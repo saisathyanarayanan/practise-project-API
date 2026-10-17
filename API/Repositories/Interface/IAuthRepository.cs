@@ -1,6 +1,6 @@
 using API.Models;
 
-namespace API.Repositories;
+namespace API.Repositories.Interface;
 
 /// <summary>
 /// Data Access abstraction for Authentication and Client Credentials.

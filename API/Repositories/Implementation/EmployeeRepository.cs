@@ -1,9 +1,10 @@
-﻿using API.Data;
+using API.Data;
 using API.DTOs;
 using API.Models;
+using API.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Repositories;
+namespace API.Repositories.Implementation;
 
 public class EmployeeRepository : IEmployeeRepository
 {

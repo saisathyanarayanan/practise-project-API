@@ -1,6 +1,7 @@
 using API.DTOs;
+using API.Services.Interface;
 
-namespace API.Services;
+namespace API.Services.Implementation;
 
 public class DepartmentService : IDepartmentService
 {

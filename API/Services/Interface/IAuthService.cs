@@ -2,7 +2,7 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Models;
 
-namespace API.Services;
+namespace API.Services.Interface;
 
 /// <summary>
 /// Business logic contract for User authentication, claim resolution, and client token issuance.

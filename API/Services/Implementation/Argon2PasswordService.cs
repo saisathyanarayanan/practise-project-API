@@ -1,8 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
+using API.Services.Interface;
 using Isopoh.Cryptography.Argon2;
 
-namespace API.Services;
+namespace API.Services.Implementation;
 
 /// <summary>
 /// Enterprise Argon2id Password Hashing Service.

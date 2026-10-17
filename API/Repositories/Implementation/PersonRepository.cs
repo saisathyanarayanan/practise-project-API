@@ -1,7 +1,8 @@
 using API.Models;
+using API.Repositories.Interface;
 using Microsoft.Data.SqlClient;
 
-namespace API.Repositories;
+namespace API.Repositories.Implementation;
 
 public class PersonRepository : IPersonRepository
 {

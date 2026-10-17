@@ -2,9 +2,10 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Jwt;
 using API.Models;
-using API.Repositories;
+using API.Repositories.Interface;
+using API.Services.Interface;
 
-namespace API.Services;
+namespace API.Services.Implementation;
 
 /// <summary>
 /// Business logic implementation for Authentication.

@@ -1,4 +1,4 @@
-namespace API.Services;
+namespace API.Services.Interface;
 
 public interface IArgon2PasswordService
 {

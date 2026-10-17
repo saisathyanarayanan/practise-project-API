@@ -1,7 +1,8 @@
 using API.Data;
+using API.Repositories.Interface;
 using Microsoft.Data.SqlClient;
 
-namespace API.Repositories;
+namespace API.Repositories.Implementation;
 
 /// <summary>
 /// Implementation of IDatabaseHealthRepository.

@@ -1,7 +1,7 @@
 using API.DTOs;
 using API.Models;
 
-namespace API.Services;
+namespace API.Services.Interface;
 
 public interface IUserManagementService
 {

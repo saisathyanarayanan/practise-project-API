@@ -1,7 +1,7 @@
-﻿using API.DTOs;
+using API.DTOs;
 using API.Models;
 
-namespace API.Repositories;
+namespace API.Repositories.Interface;
 
 public interface IEmployeeRepository
 {

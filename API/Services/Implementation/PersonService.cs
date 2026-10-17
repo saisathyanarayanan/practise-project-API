@@ -3,9 +3,10 @@ using System.Text;
 using System.Text.Json;
 using API.DTOs;
 using API.Models;
-using API.Repositories;
+using API.Repositories.Interface;
+using API.Services.Interface;
 
-namespace API.Services;
+namespace API.Services.Implementation;
 
 public class PersonService : IPersonService
 {

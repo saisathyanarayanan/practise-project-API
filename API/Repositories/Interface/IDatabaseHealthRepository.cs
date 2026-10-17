@@ -1,4 +1,4 @@
-namespace API.Repositories;
+namespace API.Repositories.Interface;
 
 /// <summary>
 /// Abstraction for database connectivity and health diagnostics.

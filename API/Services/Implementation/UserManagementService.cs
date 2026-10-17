@@ -1,8 +1,9 @@
 using API.DTOs;
 using API.Models;
-using API.Repositories;
+using API.Repositories.Interface;
+using API.Services.Interface;
 
-namespace API.Services;
+namespace API.Services.Implementation;
 
 public class UserManagementService : IUserManagementService
 {

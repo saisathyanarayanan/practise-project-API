@@ -1,7 +1,8 @@
 using API.DTOs;
-using API.Repositories;
+using API.Repositories.Interface;
+using API.Services.Interface;
 
-namespace API.Services;
+namespace API.Services.Implementation;
 
 public class DatabaseHealthService : IDatabaseHealthService
 {

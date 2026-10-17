@@ -1,6 +1,6 @@
-﻿using API.DTOs;
+using API.DTOs;
 
-namespace API.Services;
+namespace API.Services.Interface;
 
 public interface IEmployeeService
 {

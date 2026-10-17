@@ -3,8 +3,10 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using API.Vault;
 using API.Jwt;
-using API.Repositories;
-using API.Services;
+using API.Repositories.Interface;
+using API.Repositories.Implementation;
+using API.Services.Interface;
+using API.Services.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
